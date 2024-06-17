@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网络连接速度测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>网络连接速度测试</h1>
+        <button class="button" onclick="testSpeed()">开始测试</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function testSpeed() {
+            const fileUrl = "https://mirrors.tuna.tsinghua.edu.cn/aosp-monthly/aosp-latest.tar"; // 替换为一个较大的文件URL
+            const startTime = new Date().getTime();
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", fileUrl, true);
+            xhr.responseType = "blob";
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const endTime = new Date().getTime();
+                    const duration = (endTime - startTime) / 1000; // 秒
+                    const fileSize = xhr.response.size / 1024 / 1024; // MB
+                    const speed = (fileSize / duration).toFixed(2); // MB/s
+                    document.getElementById("result").innerText = `下载速度: ${speed} MB/s`;
+                } else {
+                    document.getElementById("result").innerText = "下载失败，请重试。";
+                }
+            };
+
+            xhr.onerror = function() {
+                document.getElementById("result").innerText = "下载失败，请重试。";
+            };
+
+            xhr.send();
+        }
+    </script>
+</body>
+</html>
